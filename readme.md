@@ -6,6 +6,10 @@
 
 ```pip install -r requirements.txt```
 
+## Run
+
+```python main.py```
+
 ## Running arguments (Optional)
 
 |Short form | full form      | type              | description                | Default      |
