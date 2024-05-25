@@ -23,7 +23,7 @@ import math
 
 class Serial_Viewer(ctk.CTk):
 
-    def __init__(self, serial_port, serial_baudrate):
+    def __init__(self, serial_port, serial_baudrate, refresh_rate=100):
         super().__init__()
 
         # Set app basic UI config
@@ -56,6 +56,8 @@ class Serial_Viewer(ctk.CTk):
         #serial setup
         self.serial = serial.Serial(serial_port, serial_baudrate)
 
+        self.refresh_rate = int(1000/refresh_rate)
+
         #arrow image setup
         self.arrow_size = 100
 
@@ -80,7 +82,7 @@ class Serial_Viewer(ctk.CTk):
 
     def loop(self):
         if self.serial.in_waiting == 0:  # check if there is data in the serial buffer
-            self.after(10, self.loop)
+            self.after(self.refresh_rate, self.loop)
             return      
         ser_in = self.serial.readline().decode().strip()
         if(len(ser_in) > 0):
@@ -91,7 +93,7 @@ class Serial_Viewer(ctk.CTk):
                     self.heading = int(ser_in[1:])
                 # if not, skip to the next iteration
                 else:
-                    self.after(10, self.loop)
+                    self.after(self.refresh_rate, self.loop)
                     return
         
         img_dark = self.arrow_dark.rotate(self.heading, expand=False)
@@ -102,7 +104,7 @@ class Serial_Viewer(ctk.CTk):
 
         self.label_heading.configure(text = str(self.heading))
 
-        self.after(10, self.loop)
+        self.after(self.refresh_rate, self.loop)
 
 
     def setup_ui(self):
@@ -132,10 +134,12 @@ class Serial_Viewer(ctk.CTk):
 
 baudrate = 115200
 com_port = "COM3"
+refresh_rate = 500  # in Hz
 
 arg_parser = argparse.ArgumentParser(description="IMU heading visualiser")
 arg_parser.add_argument("-p", "--com", type=str, help="COM port to listen to serial")
 arg_parser.add_argument("-r", "--baudrate", type=int, help="Serial baud rate")
+arg_parser.add_argument("-f", "--refresh_rate", type=int, help="Refresh rate of serial in Hz")
 
 def parse_args():
     global baudrate, com_port
@@ -144,9 +148,11 @@ def parse_args():
         com_port = args.com
     if args.baudrate:
         baudrate = args.baudrate
+    if args.refresh_rate:
+        refresh_rate = args.refresh_rate
 
 if __name__ == "__main__":
     parse_args()
-    app = Serial_Viewer(com_port, baudrate)
+    app = Serial_Viewer(com_port, baudrate, refresh_rate)
     app.protocol("WM_DELETE_WINDOW", app.on_closing)
     app.mainloop()
