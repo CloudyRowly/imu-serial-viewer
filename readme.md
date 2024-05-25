@@ -2,11 +2,17 @@
 
 ![screenshot of the program](assets/Screenshot%202024-05-25%20200625.png)
 
+## Requirement
+
+Serial must send a string in the format ```Hxxx \r\n``` for the program to pickup and display
+
 ## Dependency Installation
 
 ```pip install -r requirements.txt```
 
 ## Run
+
+Execute the file run.bat, if it does not run, use CLI to cd to the project directory and run:
 
 ```python main.py```
 

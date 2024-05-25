@@ -1,17 +1,11 @@
-import datetime
-from decimal import Decimal
-from decimal import InvalidOperation
 import os
 import pathlib
 import sys
-from ctypes import WinDLL
 import customtkinter as ctk
 import serial
-from PIL import Image, ImageTk
-from tkinter import Label
+from PIL import Image
 import argparse
 import math
-import threading
 
 class Serial_Viewer(ctk.CTk):
 
@@ -70,11 +64,21 @@ class Serial_Viewer(ctk.CTk):
         self.loop()
 
 
-    def loop(self):      
-        temp_heading = self.serial.readline().decode().strip()
-        if(len(temp_heading) > 0):
-            if temp_heading[0] == 'H' and temp_heading[1:4].isdigit():
-                self.heading = int(temp_heading[1:])
+    def loop(self):
+        if self.serial.in_waiting == 0:  # check if there is data in the serial buffer
+            self.after(10, self.loop)
+            return      
+        ser_in = self.serial.readline().decode().strip()
+        if(len(ser_in) > 0):
+            print(ser_in)
+            if(len(ser_in) <= 4):
+                # check if the serial input is a heading value, encoding format is HXXX
+                if ser_in[0] == 'H' and ser_in[1:].isdigit():
+                    self.heading = int(ser_in[1:])
+                # if not, skip to the next iteration
+                else:
+                    self.after(10, self.loop)
+                    return
         
         img_dark = self.arrow_dark.rotate(self.heading, expand=False)
         img_light = self.arrow_light.rotate(self.heading, expand=False)
@@ -83,7 +87,6 @@ class Serial_Viewer(ctk.CTk):
         self.image_label.configure(image=img_obj)
 
         self.label_heading.configure(text = str(self.heading))
-        #self.heading += 1
 
         self.after(10, self.loop)
 
