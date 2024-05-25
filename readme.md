@@ -22,3 +22,7 @@ Execute the file run.bat, if it does not run, use CLI to cd to the project direc
 |-----------|----------------|-------------------|----------------------------|--------------|
 |-p         |--com           |string             |COM port to listen to serial| COM3         |
 |-r         |--baudrate      |int                |Serial baud rate            | 115200       |
+
+### Attribution acknowledgment
+
+<a href="https://www.flaticon.com/free-icons/navigation" title="navigation icons">Navigation icons created by Smashicons - Flaticon</a>
