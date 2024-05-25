@@ -8,7 +8,7 @@
 
 ## Running arguments (Optional)
 
-|Short form | full form      | type              | description                                                           | Default                             | optional |
-|-----------|----------------|-------------------|-----------------------------------------------------------------------|-------------------------------------|----------|
-|-p         |--com          |string               |COM port to listen to serial                                                  | COM3                                 |[X]       |
-|-r         |--baudrate          |int                |Serial baud rate                                   | 115200                   |[X]       |
+|Short form | full form      | type              | description                | Default      |
+|-----------|----------------|-------------------|----------------------------|--------------|
+|-p         |--com           |string             |COM port to listen to serial| COM3         |
+|-r         |--baudrate      |int                |Serial baud rate            | 115200       |
